@@ -1,0 +1,68 @@
+<html>
+<meta http-equiv="Cache-Control" content="no-store" />
+<head>
+  <title>Stock Quote Connector-Tutorial</title>
+
+  // Load Tableau libraries
+  <script src="https://connectors.tableau.com/libs/tableauwdc-1.1.1.js" type="text/javascript"></script>
+
+// Load Google-s JQuery
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js" type="text/javascript"></script>
+
+  //Get myConnector running
+  <script type="text/javascript">
+  (function() {
+      var myConnector = tableau.makeConnector();
+
+      myConnector.getColumnHeaders = function() {
+          var fieldNames = [];
+          var fieldTypes = [];
+          tableau.headersCallback(fieldNames, fieldTypes);
+      }
+
+      myConnector.getTableData = function(lastRecordToken) {
+          var dataToReturn = [];
+          var lastRecordToken = 0;
+          var hasMoreData = false;
+          tableau.dataCallback(dataToReturn, lastRecordToken.toString(), hasMoreData);
+      }
+
+      tableau.registerConnector(myConnector);
+  })();
+
+  //After submit button, submit user input
+  $(document).ready(function() {
+    $("#submitButton").click(function() {
+      var tickerSymbol = $('#ticker').val().trim();
+      if (tickerSymbol) {
+        tableau.connectionName = "Stock Data for " + tickerSymbol;
+        tableau.connectionData = tickerSymbol;
+        tableau.submit();
+      }
+    });
+  });
+  </script>
+  
+</head>
+<body>
+
+// Snippet para pedir el ticker y un botón de submisión
+<p>Enter a stock ticker symbol: <input type="text" id="ticker" /></p>
+  <p><button type="button" id="submitButton">Feed me Data</button></p>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
