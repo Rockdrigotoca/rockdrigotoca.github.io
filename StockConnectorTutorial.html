@@ -8,38 +8,11 @@
   <script type="text/javascript">
   (function() {
 
-    function buildUri(tickerSymbol, startDate, endDate) {
-      var startDateStr = getFormattedDate(startDate);
-      var endDateStr   = getFormattedDate(endDate);
-      var queryStatement = 'select * from yahoo.finance.historicaldata where symbol = "' +
-                            tickerSymbol +
-                           '" and startDate = "' + startDateStr +
-                           '" and endDate = "' + endDateStr + '"';
-      var uri = 'http://query.yahooapis.com/v1/public/yql?q=' +
-                encodeURIComponent(queryStatement) +
-                "&env=http%3A%2F%2Fdatatables.org%2Falltables.env&format=json";
-      return uri;
-    }
-
-    function getFormattedDate(date) {
-        // Return a date in the format YYYY-MM-DD
-        return date.getUTCFullYear()  +
-               '-' +
-               makeTwoDigits(date.getUTCMonth() + 1) +
-               '-' +
-               makeTwoDigits(date.getUTCDate());
-    }
-
-    function makeTwoDigits(num) {
-       // Pad a digit to be two digits with leading zero
-       return num <= 9 ? "0" + num.toString() : num.toString();
-    }
-
     var myConnector = tableau.makeConnector();
 
     myConnector.getColumnHeaders = function() {
-        var fieldNames = ['Ticker', 'Day', 'Close'];
-        var fieldTypes = ['string', 'date', 'float'];
+        var fieldNames = ['GUID', 'DNIS', 'appear', 'callerID', 'DestinationNumber', 'setuptime', 'timeanswer', 'timeend', 'durationSeconds'];
+        var fieldTypes = ['string', 'float', 'float', 'float', 'date', 'date', 'date', 'float'];
         tableau.headersCallback(fieldNames, fieldTypes);
     }
 
@@ -55,47 +28,22 @@
         var connectionUri = buildUri(ticker, startDate, endDate);
 
         var xhr = $.ajax({
-          url: connectionUri,
-          dataType: 'json',
+          url: www.tollfreeforwarding.com/api?u=AdminMxSr&p=7401&range=lastMonth&format=xml,
+          dataType: 'xml',
           success: function (data) {
-              if (data.query.results) {
-                var quotes = data.query.results.quote;
-                var ii;
-                for (ii = 0; ii < quotes.length; ++ii) {
-                    var entry = {'Ticker': quotes[ii].Symbol,
-                                 'Day': quotes[ii].Date,
-                                 'Close': quotes[ii].Close};
-                    dataToReturn.push(entry);
-                }
                 tableau.dataCallback(dataToReturn, lastRecordToken, false);
-              }
+              
               else {
-                  tableau.abortWithError("No results found for ticker symbol: " + ticker);
+                  tableau.abortWithError("No results found");
               }
-          },
-          error: function (xhr, ajaxOptions, thrownError) {
-              tableau.log("Connection error: " + xhr.responseText + "\n" + thrownError);
-              tableau.abortWithError("Error while trying to connect to the Yahoo stock data source.");
-          }
-        });
       }
       tableau.registerConnector(myConnector);
   })();
 
-  $(document).ready(function() {
-    $("#submitButton").click(function() {
-      var tickerSymbol = $('#ticker').val().trim();
-      if (tickerSymbol) {
-        tableau.connectionName = "Stock Data for " + tickerSymbol;
-        tableau.connectionData = tickerSymbol;
-        tableau.submit();
-      }
-    });
-  });
+ 
 </script>
 </head>
 <body>
-  <p>Enter a stock ticker symbol: <input type="text" id="ticker" /></p>
-  <p><button type="button" id="submitButton">Get the Data</button></p>
+ <a href="http://www.tollfreeforwarding.com/api?u=AdminMxSr&p=7401&range=lastMonth&format=html">Feed my data</a>
 </body>
 </html>
