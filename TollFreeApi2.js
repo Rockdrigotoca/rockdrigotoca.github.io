@@ -62,7 +62,7 @@
     tableau.registerConnector(myConnector);
     $(document).ready(function () {
     $("#submitButton").click(function () {
-        tableau.connectionName = "Toll Free Api";
+        tableau.connectionName = "callForwardAPIdata";
         tableau.submit();
     });
 });
