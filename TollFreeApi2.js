@@ -37,7 +37,7 @@
             'setuptime':    $($tollfreeTableColumnsInRow[1]).date(),
             'timeanswer':  $($tollfreeTableColumnsInRow[0]).date(),
             'timeend': $($tollfreeTableColumnsInRow[0]).date(),
-            'durationSeconds':    $($tollfreeTableColumnsInRow[1]).float(),
+            'durationSeconds':    $($tollfreeTableColumnsInRow[1]).float()
           });
         });
         tableau.dataCallback(tableData, "", false);
