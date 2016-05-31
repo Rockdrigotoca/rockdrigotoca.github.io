@@ -28,16 +28,16 @@
 
  
           // Build a row from the parsed response
-          tableData.push({
-            'GUID':  $($tollfreeTableColumnsInRow[0]).string(),
-            'DNIS': $($tollfreeTableColumnsInRow[0]).float(),
-            'appear':    $($tollfreeTableColumnsInRow[1]).float(),
-            'callerID':  $($tollfreeTableColumnsInRow[0]).float(),
-            'DestinationNumber': $($tollfreeTableColumnsInRow[0]).float(),
-            'setuptime':    $($tollfreeTableColumnsInRow[1]).date(),
-            'timeanswer':  $($tollfreeTableColumnsInRow[0]).date(),
-            'timeend': $($tollfreeTableColumnsInRow[0]).date(),
-            'durationSeconds':    $($tollfreeTableColumnsInRow[1]).float()
+            tableData.push({
+                "GUID" : GUID,
+                "DNIS" : DNIS,
+                "appear" : appear,
+                "callerID" : callerID,
+                "DestinationNumber" : DestinationNumber,
+                "setuptime" : setuptime,
+                "timeanswer" : timeanswer,
+                "timend" : timend,
+                "durationSeconds" : durationSeconds
           });
         });
         tableau.dataCallback(tableData, "", false);
