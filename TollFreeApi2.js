@@ -22,22 +22,22 @@
     var xhr = $.ajax({
       url: getConnectionUrl(connectionUrl),
       success: function (response) {
-        var stockTableRows = $(response).find('#stockTable tr');
-        stockTableRows = stockTableRows.not(':first'); // Removes the first row which is the header
-
+ 
         var tableData = [];
-        stockTableRows.each(function (i, row) {
+        tollfreeTableRows.each(function (i, row) {
 
-          var $stockTableColumnsInRow = $(row).find('td');
-
+ 
           // Build a row from the parsed response
           tableData.push({
-            'Ticker':  $($stockTableColumnsInRow[0]).find('a').text(),
-            'Company': $($stockTableColumnsInRow[0]).text(),
-            'Date':    $($stockTableColumnsInRow[1]).text(),
-            'Segment': SEGMENT_KEY[$($stockTableColumnsInRow[2]).find('img').attr('alt')],
-            'Call':    CALL_ICON[$($stockTableColumnsInRow[3]).find('img').attr('alt')],
-            'Price':   parseFloat($($stockTableColumnsInRow[4]).text().substring(1)) // remove currency, and convert to Float.
+            'GUID':  $($tollfreeTableColumnsInRow[0]).string(),
+            'DNIS': $($tollfreeTableColumnsInRow[0]).float(),
+            'appear':    $($tollfreeTableColumnsInRow[1]).float(),
+            'callerID':  $($tollfreeTableColumnsInRow[0]).float(),
+            'DestinationNumber': $($tollfreeTableColumnsInRow[0]).float(),
+            'setuptime':    $($tollfreeTableColumnsInRow[1]).date(),
+            'timeanswer':  $($tollfreeTableColumnsInRow[0]).date(),
+            'timeend': $($tollfreeTableColumnsInRow[0]).date(),
+            'durationSeconds':    $($tollfreeTableColumnsInRow[1]).float(),
           });
         });
         tableau.dataCallback(tableData, "", false);
