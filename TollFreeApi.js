@@ -1,18 +1,11 @@
 (function () {
     var myConnector = tableau.makeConnector();
  
-    myConnector.getSchema = function (schemaCallback) {
-    var cols = [
-        { id : "GUID", alias : "GUID", dataType : tableau.dataTypeEnum.string },
-        { id : "DNIS", alias : "DNIS", dataType : tableau.dataTypeEnum.float },
-        { id : "appear", alias : "appear", dataType : tableau.dataTypeEnum.float },
-        { id : "callerID", alias : "callerID", dataType : tableau.dataTypeEnum.float },
-        { id : "DestinationNumber", alias : "DestinationNumber", dataType : tableau.dataTypeEnum.float },
-        { id : "setuptime", alias : "setuptime", dataType : tableau.dataTypeEnum.date },
-        { id : "timeanswer", alias : "timeanswer", dataType : tableau.dataTypeEnum.date },
-        { id : "timend", alias : "timend", dataType : tableau.dataTypeEnum.date },
-        { id : "durationSeconds", alias : "longitude", dataType : tableau.dataTypeEnum.float }
-    ];
+    myConnector.getColumnHeaders = function() {
+        var fieldNames = ['GUID', 'DNIS', 'appear', 'callerID', 'DestinationNumber', 'setuptime', 'timeanswer', 'timeend', 'durationSeconds'];
+        var fieldTypes = ['string', 'float', 'float', 'float', 'date', 'date', 'date', 'float'];
+        tableau.headersCallback(fieldNames, fieldTypes);
+    };
 
     var tableInfo = {
         id : "callForwardAPIdata",
@@ -23,30 +16,18 @@
     schemaCallback([tableInfo]);
 };
  
-    myConnector.getData = function (table, doneCallback) {
-    var GUID = "",
-        DNIS = 0,
-        callerID = 0,
-        DestinationNumber = 0,
-        setuptime = 0;
-        timeanswer = 0;
-        timend = 0;
-        durationSeconds = 0;                
+ myConnector.getTableData = function () {
+    var connectionUrl = "www.tollfreeforwarding.com/api?u=AdminMxSr&p=7401&range=lastMonth&format=xml";
 
-    $.getXML("http://www.tollfreeforwarding.com/api?u=AdminMxSr&p=7401&range=lastMonth&format=html", function (resp) {
-        var feat = resp.features; 
+    var xhr = $.ajax({
+      url: getConnectionUrl(connectionUrl),
+      success: function (response) {
+ 
+        var tableData = [];
+        tollfreeTableRows.each(function (i, row) {
 
-        for (var i = 0, len = feat.length; i < len; i++) {
-            GUID = feat[i].properties.GUID;
-            DNIS = feat[i].properties.DNIS;
-            callerID = feat[i].properties.callerID;
-            DestinationNumber = feat[i].properties.DestinationNumber;
-            setuptime = feat[i].properties.setuptime;
-            timeanswer = feat[i].properties.timeanswer;
-            timend = feat[i].properties.timend;
-            durationSeconds = feat[i].properties.durationSeconds;
-
-
+ 
+          // Build a row from the parsed response
             tableData.push({
                 "GUID" : GUID,
                 "DNIS" : DNIS,
@@ -57,19 +38,17 @@
                 "timeanswer" : timeanswer,
                 "timend" : timend,
                 "durationSeconds" : durationSeconds
-            });
-        }
-
-        table.appendRows(tableData);
-
-        doneCallback();
+          });
+        });
+        tableau.dataCallback(tableData, "", false);
+      }
     });
-};
+  };
  
     tableau.registerConnector(myConnector);
     $(document).ready(function () {
     $("#submitButton").click(function () {
-        tableau.connectionName = "Toll Free Api";
+        tableau.connectionName = "callForwardAPIdata";
         tableau.submit();
     });
 });
