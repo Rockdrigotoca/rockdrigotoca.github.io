@@ -19,26 +19,10 @@
  myConnector.getTableData = function () {
     var connectionUrl = "https://api.similarweb.com/v1/website/metroscubicos.com/total-traffic-and-engagement/visits?api_key=2536e00f4120a5c347aef0c849b97e47&start_date=2016-01&end_date=2016-04&main_domain_only=false&granularity=monthly";
 
-      var data = JSON.parse( fetch_visitors);
+      var data = JSON.parse(fetch_visitors);
     return data.EstimatedVisitors;
 
-    var xhr = $.ajax({
-      url: getConnectionUrl(connectionUrl),
-      success: function (response) {
- 
-        var tableData = [];
-        similarwebTableRows.each(function (i, row) {
-
- 
-          // Build a row from the parsed response
-            tableData.push({
-                "date" : date,
-                "visits" : visits
-          });
-        });
         tableau.dataCallback(tableData, "", false);
-      }
-    });
   };
  
     tableau.registerConnector(myConnector);
